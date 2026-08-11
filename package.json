@@ -1,0 +1,25 @@
+{
+  "name": "captcha-helper",
+  "description": "轻量 Chrome 插件：右键算术验证码，调用自建 API 填入计算结果",
+  "private": true,
+  "version": "0.2.0",
+  "type": "module",
+  "scripts": {
+    "dev": "wxt",
+    "build": "wxt build",
+    "zip": "wxt zip",
+    "postinstall": "wxt prepare"
+  },
+  "dependencies": {
+    "element-plus": "^2.14.4",
+    "vue": "^3.5.29"
+  },
+  "devDependencies": {
+    "@element-plus/icons-vue": "^2.3.2",
+    "@wxt-dev/module-vue": "^1.0.3",
+    "typescript": "^5.9.3",
+    "vite": "^8.1.5",
+    "vue-tsc": "^3.2.5",
+    "wxt": "^0.21.3"
+  }
+}

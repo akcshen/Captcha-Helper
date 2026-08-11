@@ -1,0 +1,41 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+.output
+dist
+stats.html
+stats-*.json
+.wxt
+web-ext.config.ts
+
+# 本地模型残留（本项目已改为纯 API，不再需要）
+public/ort/
+public/models/
+eng.traineddata
+*.traineddata
+*.onnx
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# 训练数据导出（体积大，勿提交）
+captcha-dataset/
+captcha-dataset-smoke/
+tools/kaptcha-dataset/captcha-dataset/
+tools/kaptcha-dataset/target/
+tools/kaptcha-dataset/.libs/

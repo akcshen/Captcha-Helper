@@ -1,0 +1,8 @@
+body {
+  margin: 0;
+  background: #f8fafc;
+}
+
+#app {
+  min-width: 280px;
+}

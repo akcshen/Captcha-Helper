@@ -7,7 +7,9 @@
 
 ## 1. 背景与目标
 
-帮助用户识别网页上的**简单图片文字验证码**（数字/字母），通过右键菜单识别并自动填入附近输入框。
+帮助用户识别网页上的**简单图片文字验证码**（数字/字母，以及 `6+2=?` 这类算术题），通过右键菜单识别并自动填入附近输入框。
+
+算术验证码默认会自动计算结果（如识别 `6 + 2 = ?` 后填入 `8`）。
 
 支持两种识别方式：
 
@@ -70,7 +72,7 @@ Options / Popup (Vue3 + Element Plus)
 - `contextMenus`
 - `storage`
 - `activeTab`
-- 使用远程 API 时按需配置 `host_permissions`（超级鹰域名、自定义 URL 由用户配置后动态或在文档中说明需配置）
+- 使用远程 API 时按需配置 `host_permissions`（超级鹰域名；自定义 URL 需在权限中放行）
 
 敏感凭证仅存于 `chrome.storage.local`，不暴露给网页上下文。
 
@@ -151,8 +153,8 @@ async function recognize(image, options) {}
 ```
 Captcha-Helper/
 ├── entrypoints/
-│   ├── background.ts
-│   ├── content.ts
+│   ├── background.js
+│   ├── content.js
 │   ├── popup/
 │   └── options/
 ├── lib/
@@ -168,10 +170,10 @@ Captcha-Helper/
 ├── assets/
 ├── wxt.config.ts
 ├── package.json
-└── docs/superpowers/specs/
+└── docs/design.md
 ```
 
-说明：WXT 脚手架可能默认 TypeScript 入口；业务代码优先 JavaScript，与团队栈一致。若脚手架强制 `.ts` 入口文件，入口可保持薄封装并调用 `.js` 模块。
+说明：WXT 脚手架可能默认 TypeScript 入口；业务代码优先 JavaScript。若脚手架强制 `.ts` 入口文件，入口可保持薄封装并调用 `.js` 模块。
 
 ## 8. 验收标准
 
