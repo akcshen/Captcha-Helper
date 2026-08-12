@@ -7,6 +7,8 @@ const loading = ref(false);
 const saving = ref(false);
 const testing = ref(false);
 const testResult = ref('');
+const testRaw = ref('');
+const testApiPayload = ref('');
 const form = reactive(structuredClone(DEFAULT_SETTINGS));
 
 onMounted(async () => {
@@ -50,6 +52,8 @@ async function handleTest(file) {
   if (!file) return;
   testing.value = true;
   testResult.value = '';
+  testRaw.value = '';
+  testApiPayload.value = '';
   try {
     await handleSave();
     const dataUrl = await fileToPngDataUrl(file);
@@ -59,6 +63,10 @@ async function handleTest(file) {
     });
     if (!result?.ok) throw new Error(result?.error || '识别失败');
     testResult.value = result.text || '（空）';
+    testRaw.value = result.raw || '（空）';
+    testApiPayload.value = result.apiPayload
+      ? JSON.stringify(result.apiPayload, null, 2)
+      : '';
     ElMessage.success('测试完成');
   } catch (err) {
     ElMessage.error(err?.message || '测试失败');
@@ -145,8 +153,21 @@ function onFileChange(uploadFile) {
           <el-button :loading="testing">上传并识别</el-button>
         </el-upload>
       </el-form-item>
-      <el-form-item v-if="testResult" label="答案">
+      <el-form-item v-if="testRaw" label="API 原始">
+        <el-tag type="warning" size="large">{{ testRaw }}</el-tag>
+        <span class="hint">服务端 /ocr 的 result（应为公式，如 6+2=?）</span>
+      </el-form-item>
+      <el-form-item v-if="testResult" label="计算结果">
         <el-tag type="success" size="large">{{ testResult }}</el-tag>
+        <span class="hint">插件本地求值后填入的值</span>
+      </el-form-item>
+      <el-form-item v-if="testApiPayload" label="完整响应">
+        <el-input
+          :model-value="testApiPayload"
+          type="textarea"
+          :rows="6"
+          readonly
+        />
       </el-form-item>
     </el-form>
   </div>
@@ -179,5 +200,12 @@ code {
   border-radius: 4px;
   background: #f3f4f6;
   font-size: 12px;
+}
+.hint {
+  display: block;
+  margin-top: 6px;
+  color: #9ca3af;
+  font-size: 12px;
+  line-height: 1.4;
 }
 </style>

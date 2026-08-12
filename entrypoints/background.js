@@ -30,7 +30,7 @@ export default defineBackground(() => {
       });
 
       const blob = await getCaptchaImageBlob(tabId, info.srcUrl || '');
-      const { text } = await recognize(blob);
+      const { text, raw } = await recognize(blob);
 
       if (!text) {
         await notifyContent(tabId, {
@@ -41,7 +41,7 @@ export default defineBackground(() => {
         return;
       }
 
-      await saveSettings({ lastResult: text });
+      await saveSettings({ lastResult: text, lastRawResult: raw || '' });
 
       const fillResult = await browser.tabs.sendMessage(tabId, {
         type: 'FILL_CAPTCHA',
@@ -49,16 +49,17 @@ export default defineBackground(() => {
         srcUrl: info.srcUrl || '',
       });
 
+      const rawHint = raw && raw !== text ? `（原始: ${raw}）` : '';
       if (fillResult?.status === 'filled') {
         await notifyContent(tabId, {
           type: 'CAPTCHA_TOAST',
-          message: `已填入：${text}`,
+          message: `已填入：${text}${rawHint}`,
           toastType: 'success',
         });
       } else {
         await notifyContent(tabId, {
           type: 'CAPTCHA_TOAST',
-          message: `已复制：${text}（未找到输入框）`,
+          message: `已复制：${text}${rawHint}（未找到输入框）`,
           toastType: 'info',
         });
       }
@@ -80,7 +81,10 @@ export default defineBackground(() => {
           const blob = await res.blob();
           const result = await recognize(blob);
           if (result.text) {
-            await saveSettings({ lastResult: result.text });
+            await saveSettings({
+              lastResult: result.text,
+              lastRawResult: result.raw || '',
+            });
           }
           sendResponse({ ok: true, ...result });
         } catch (err) {
