@@ -22,6 +22,9 @@ eng.traineddata
 *.traineddata
 *.onnx
 
+# Local code index (do not commit)
+.codegraph/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

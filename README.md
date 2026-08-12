@@ -6,9 +6,10 @@
 
 ## 为什么很小
 
-识别全部交给服务端（如 `https://ocr.kcshen.cn/calculate`），插件本身**不打包** ONNX / WASM 模型。
+识别全部交给服务端（如 `https://ocr.kcshen.cn/ocr`），插件本身**不打包** ONNX / WASM 模型。
 
-服务端部署见 [docs/self-hosted-ddddocr.md](./docs/self-hosted-ddddocr.md)。
+- 服务端部署：[docs/deploy-official-ddddocr.md](./docs/deploy-official-ddddocr.md)
+- 插件取图与识别流程：[docs/image-ocr-flow.md](./docs/image-ocr-flow.md)
 
 ## 使用
 
@@ -19,7 +20,7 @@ npm run dev    # 或 npm run build
 
 Chrome → `chrome://extensions` → 加载 `dist/chrome-mv3`。
 
-1. 打开扩展设置，确认 API URL（默认 `https://ocr.kcshen.cn/calculate`）
+1. 打开扩展设置，确认 API URL（默认 `https://ocr.kcshen.cn/ocr`）
 2. 网页上对验证码图片右键 →「识别并填入计算结果」
 
 ## 技术栈

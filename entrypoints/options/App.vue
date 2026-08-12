@@ -22,9 +22,12 @@ async function handleSave() {
   saving.value = true;
   try {
     let apiUrl = form.apiUrl.trim().replace(/\/+$/, '');
-    // 误填 classification 时自动改到 calculate（要的是计算结果，不是题目原文）
-    if (/\/classification$/i.test(apiUrl)) {
-      apiUrl = apiUrl.replace(/\/classification$/i, '/calculate');
+    // 统一到官方 /ocr（旧 calculate / classification 自动纠正）
+    if (/\/calculate$/i.test(apiUrl)) {
+      apiUrl = apiUrl.replace(/\/calculate$/i, '/ocr');
+      form.apiUrl = apiUrl;
+    } else if (/\/classification$/i.test(apiUrl)) {
+      apiUrl = apiUrl.replace(/\/classification$/i, '/ocr');
       form.apiUrl = apiUrl;
     }
     await saveSettings({
@@ -119,7 +122,7 @@ function onFileChange(uploadFile) {
 
     <el-form label-width="110px" class="form">
       <el-form-item label="API URL">
-        <el-input v-model="form.apiUrl" placeholder="https://ocr.kcshen.cn/calculate" />
+        <el-input v-model="form.apiUrl" placeholder="https://ocr.kcshen.cn/ocr" />
       </el-form-item>
       <el-form-item label="Headers">
         <el-input
