@@ -1,0 +1,5 @@
+fastapi>=0.68.0,<0.116
+uvicorn>=0.15.0,<0.35
+python-multipart>=0.0.5
+pydantic>=1.8.0,<3
+ddddocr==1.5.6

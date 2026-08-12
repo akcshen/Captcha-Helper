@@ -6,7 +6,8 @@
 
 > 说明：换成官方后，接口是 `POST /ocr`（返回公式文本），没有 `/calculate`。  
 > 算式求值由插件 `lib/ocr/math-captcha.js` 完成。  
-> **未挂自定义模型前**，通用模型对算术验证码仍可能不准；换项目是为了训完能加载专用模型。
+> **未挂自定义模型前**，通用模型对算术验证码仍可能不准；换项目是为了训完能加载专用模型。  
+> **自定义 onnx 推荐固定 `ddddocr==1.5.6`**：见下方「9. 固定 1.5.6」；1.5.6 无内置 HTTP，用仓库 `tools/ddddocr-api-156`。
 
 ---
 
@@ -201,3 +202,44 @@ docker run -d --name ddddocr --restart=unless-stopped -p 7777:8000 \
   -e DDDDOCR_HOST=0.0.0.0 -e DDDDOCR_PORT=8000 -e DDDDOCR_OCR=true -e DDDDOCR_SHOW_AD=false \
   ddddocr-api:latest
 ```
+
+---
+
+## 9. 固定 ddddocr 1.5.6（自定义模型推荐）
+
+**原因：** `dddd_trainer` 导出的 onnx 在 **1.5.x** 上更稳；**1.6.x** 可能出现空结果 / 只出单个符号（如 `+`）。  
+**限制：** **1.5.6 没有** 官方 `POST /ocr`（HTTP API 从 1.6.0 才有），不能只把 1.6 镜像里的包改成 `==1.5.6` 还指望原 `/ocr` 还能跑。
+
+做法：用本仓库薄 API（协议与插件一致）：
+
+```text
+tools/ddddocr-api-156/
+  Dockerfile
+  app.py
+  requirements.txt   # 固定 ddddocr==1.5.6
+  README.md
+```
+
+服务器：
+
+```bash
+# 把 tools/ddddocr-api-156 拷到 /opt/ddddocr-156
+cd /opt/ddddocr-156
+docker build -t ddddocr-156:latest .
+
+docker stop ddddocr; docker rm ddddocr
+
+docker run -d \
+  --name ddddocr \
+  --restart=unless-stopped \
+  -p 7777:8000 \
+  -v /opt/ddddocr/models:/models:ro \
+  -e DDDDOCR_IMPORT_ONNX_PATH=/models/obd_math.onnx \
+  -e DDDDOCR_CHARSETS_PATH=/models/charsets.json \
+  ddddocr-156:latest
+
+curl -s http://127.0.0.1:7777/health
+# 期望含 "ddddocr":"1.5.6"
+```
+
+插件 URL 不变：`https://ocr.kcshen.cn/ocr`。详细说明见该目录 README。

@@ -8,7 +8,7 @@
 
 识别全部交给服务端（如 `https://ocr.kcshen.cn/ocr`），插件本身**不打包** ONNX / WASM 模型。
 
-- 服务端部署：[docs/deploy-official-ddddocr.md](./docs/deploy-official-ddddocr.md)
+- 服务端部署：[docs/deploy-official-ddddocr.md](./docs/deploy-official-ddddocr.md)（自定义模型推荐 [tools/ddddocr-api-156](./tools/ddddocr-api-156)，固定 `ddddocr==1.5.6`）
 - 插件取图与识别流程：[docs/image-ocr-flow.md](./docs/image-ocr-flow.md)
 
 ## 使用
