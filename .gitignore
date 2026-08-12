@@ -42,3 +42,5 @@ captcha-dataset-smoke/
 tools/kaptcha-dataset/captcha-dataset/
 tools/kaptcha-dataset/target/
 tools/kaptcha-dataset/.libs/
+tools/.apache-maven/
+tools/dddd_trainer/
